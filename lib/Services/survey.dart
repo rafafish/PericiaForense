@@ -22,8 +22,10 @@ class ServicesSurvey {
     _database = await localDatabase.openDB();
     var id = row['id'];
 
+    print(row);
+
     http.Response response = await http.post(
-        "http://167.172.202.168/custom_projects/vendemmia/insert_survey.php",
+        "https://tlscope.app/custom_projects/iml/insert_survey.php",
         body: row);
 
     print(response.statusCode.toString());

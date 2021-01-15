@@ -1,8 +1,8 @@
-library survey.globals;
+library pericia.globals;
 
-import 'package:pericia_iml/models/survey.dart';
+import 'package:pericia_iml/models/pericia.dart';
 
-List<Map<String, dynamic>> listSurvey = [];
-Survey singleSurvey = Survey();
+List<Map<String, dynamic>> listPericia = [];
+Pericia singlePericia = Pericia();
 int teste = 0;
 String isUpdated = '0';

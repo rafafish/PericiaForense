@@ -2,12 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:pericia_iml/Screens/home.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(MyApp());
+  // We need to call it manually,
+  // because we going to call setPreferredOrientations()
+  // before the runApp() call
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Than we setup preferred orientations,
+  // and only after it finished we run our app
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft])
+      .then((value) => runApp(IML()));
 }
 
-class MyApp extends StatelessWidget {
+class IML extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -17,25 +26,25 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate
       ],
       supportedLocales: [const Locale('pt', 'BR')],
-      title: 'Telescope - vendemmia',
+      title: 'IML',
       theme:
           ThemeData(primarySwatch: Colors.grey, primaryColor: Colors.grey[800]),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+      home: MainPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  MainPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return _introScreen();
@@ -51,24 +60,14 @@ Widget _introScreen() {
         loaderColor: Colors.transparent,
       ),
       Container(
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/bg.png"),
-            fit: BoxFit.none,
+            image: AssetImage("images/splash.png"),
+            fit: BoxFit.fill,
           ),
         ),
       ),
-      Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Image(
-            image: AssetImage('images/logo-telescope-white.png'),
-            height: 80.0,
-          ),
-        ],
-      ))
     ],
   );
 }

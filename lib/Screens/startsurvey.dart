@@ -2,6 +2,8 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:pericia_iml/Screens/tabform.dart';
 import 'package:pericia_iml/Screens/tablesoes.dart';
+import 'package:pericia_iml/Screens/tabcroqui.dart';
+import 'package:pericia_iml/Screens/tabfotos.dart';
 import 'package:pericia_iml/services/globals.dart' as globals;
 
 class StartScreen extends StatefulWidget {
@@ -9,29 +11,27 @@ class StartScreen extends StatefulWidget {
   _StartScreenState createState() => _StartScreenState();
 }
 
-class _StartScreenState extends State<StartScreen> {
-  saveDataSurvey() {
+class _StartScreenState extends State<StartScreen>
+    with TickerProviderStateMixin {
+  iniciaPericia() {
     var uuid = Uuid();
-    globals.singleSurvey.id = '';
-    globals.singleSurvey.datahora_inicio = '';
-    globals.singleSurvey.datahora_fim = '';
-    globals.singleSurvey.sobre_novo_posicionamento = '';
-    globals.singleSurvey.evento_de_lancamento = '';
-    globals.singleSurvey.melhorar_suas_operacoes = '';
-    globals.singleSurvey.regStatus = '';
-    globals.listSurvey = [];
-    globals.singleSurvey.id = uuid.v1();
-    globals.singleSurvey.datahora_inicio = DateTime.now().toString();
+    globals.listPericia = [];
+    globals.singlePericia.id = uuid.v1();
+    globals.singlePericia.datahora_inicio = DateTime.now().toString();
   }
 
-  int _currentIndex = 0;
+  int _selectedPage = 0;
+  List<Widget> pageList = List<Widget>();
 
-  final tabs = [
-    TabForm(),
-    Center(child: Text('2')),
-    Center(child: Text('3')),
-    TabLesoes(),
-  ];
+  @override
+  void initState() {
+    pageList.add(TabForm());
+    pageList.add(TabCroqui());
+    pageList.add(TabFotos());
+    pageList.add(TabLesoes());
+    iniciaPericia();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +40,13 @@ class _StartScreenState extends State<StartScreen> {
           title: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text('Perícia IML'),
       ])),
-      body: tabs[_currentIndex],
+      body: IndexedStack(
+        index: _selectedPage,
+        children: pageList,
+      ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: _selectedPage,
+        onTap: _onItemTapped,
         iconSize: 30,
         items: [
           BottomNavigationBarItem(
@@ -62,12 +66,13 @@ class _StartScreenState extends State<StartScreen> {
               label: ('Esquema de Lesões'),
               backgroundColor: Colors.grey[900]),
         ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
       ),
     );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedPage = index;
+    });
   }
 }
